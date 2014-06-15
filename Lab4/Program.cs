@@ -27,8 +27,7 @@ namespace Lab4
                         Task task = generator.NextTask(tick);
                         if (task != null)
                         {
-                            //processors[task.Processor].Add(task);
-                            Console.WriteLine(task);
+                            processors[task.Processor].Add(task);
                         }
                     }
                     else
@@ -40,7 +39,7 @@ namespace Lab4
                 }
             }
 
-            Logger.Dump();
+            Logger.Result();
             Console.ReadLine();
         }
     }
