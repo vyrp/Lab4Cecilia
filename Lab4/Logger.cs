@@ -1,9 +1,6 @@
 ﻿//#define FILE
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace Lab4
@@ -50,7 +47,7 @@ namespace Lab4
             ++numAccepted;
         }
 
-        static public void Result()
+        static public void Result(long ticks)
         {
             if (!isValid)
             {
@@ -58,7 +55,10 @@ namespace Lab4
             }
             isValid = false;
 
-            Console.WriteLine("\nResult:\n\tTotal number of messages: " + numMessages + "\n\tNumber of accepted messages: " + numAccepted);
+            Console.WriteLine("\nResult:");
+            Console.WriteLine("\tTotal number of ticks: " + ticks);
+            Console.WriteLine("\tTotal number of messages: " + numMessages);
+            Console.WriteLine("\tNumber of accepted messages: " + numAccepted);
             sw.Dispose();
         }
     }

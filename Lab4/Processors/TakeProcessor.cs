@@ -1,28 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab4
 {
     class TakeProcessor : IProcessor
     {
         protected IProcessor[] processors;
+        protected int processorIndex;
 
-        public TakeProcessor(IProcessor[] processors)
+        public TakeProcessor(IProcessor[] processors, int processorIndex)
         {
             this.processors = processors;
+            this.processorIndex = processorIndex;
         }
 
         public void Update(long tick)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void Add(Task task)
+        public void Add(long tick, Task task)
         {
             throw new NotImplementedException();
+        }
+        
+        public Task TopTask()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int TaskCount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public bool IsOverloaded

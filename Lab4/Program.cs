@@ -14,20 +14,21 @@ namespace Lab4
             IProcessor[] processors = new IProcessor[NUM_PROCESSORS];
             for (int i = 0; i < NUM_PROCESSORS; i++)
             {
-                processors[i] = new GiveProcessor(processors);
+                processors[i] = new GiveProcessor(processors, i);
             }
 
+            long tick;
             using (Generator generator = new Generator())
             {
                 bool running = true;
-                for (long tick = 0; running; ++tick)
+                for (tick = 0; running; ++tick)
                 {
                     if (generator.HasTask)
                     {
                         Task task = generator.NextTask(tick);
                         if (task != null)
                         {
-                            processors[task.Processor].Add(task);
+                            processors[task.Processor].Add(tick, task);
                         }
                     }
                     else
@@ -39,7 +40,7 @@ namespace Lab4
                 }
             }
             
-            Logger.Result();
+            Logger.Result(tick);
             Console.ReadLine();
         }
     }
