@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define FILE
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +21,13 @@ namespace Lab4
         {
             isValid = true;
             numMessages = 0;
+#if FILE
             sw = new StreamWriter("log.txt");
+#else
+            sw = new StreamWriter(Console.OpenStandardOutput());
+            sw.AutoFlush = true;
+            Console.SetOut(sw);
+#endif
         }
 
         static public void LogMessage(int fromProcessor, int toProcessor)
@@ -49,9 +57,9 @@ namespace Lab4
                 throw new InvalidOperationException("Logger isn\'t valid any more.");
             }
             isValid = false;
-            sw.Dispose();
 
-            Console.WriteLine("Result:\n\tTotal number of messages: " + numMessages + "\n\tNumber of accepted messages: " + numAccepted);
+            Console.WriteLine("\nResult:\n\tTotal number of messages: " + numMessages + "\n\tNumber of accepted messages: " + numAccepted);
+            sw.Dispose();
         }
     }
 }

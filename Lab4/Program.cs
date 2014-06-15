@@ -38,7 +38,7 @@ namespace Lab4
                     Array.ForEach(processors, p => p.Update(tick));
                 }
             }
-
+            
             Logger.Result();
             Console.ReadLine();
         }
