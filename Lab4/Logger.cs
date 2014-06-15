@@ -31,7 +31,7 @@ namespace Lab4
         {
             if (!isValid)
             {
-                throw new InvalidOperationException("Logger isn\'t valid any more.");
+                throw new InvalidOperationException(@"Logger isn't valid any more.");
             }
             sw.WriteLine(fromProcessor + " -> " + toProcessor);
             ++numMessages;
@@ -41,7 +41,7 @@ namespace Lab4
         {
             if (!isValid)
             {
-                throw new InvalidOperationException("Logger isn\'t valid any more.");
+                throw new InvalidOperationException(@"Logger isn't valid any more.");
             }
             sw.WriteLine(">> " + processor);
             ++numAccepted;
@@ -51,7 +51,7 @@ namespace Lab4
         {
             if (!isValid)
             {
-                throw new InvalidOperationException("Logger isn\'t valid any more.");
+                throw new InvalidOperationException(@"Logger isn't valid any more.");
             }
             isValid = false;
 

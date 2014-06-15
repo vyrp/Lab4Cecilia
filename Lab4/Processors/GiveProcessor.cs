@@ -8,17 +8,14 @@ namespace Lab4
     {
         protected IProcessor[] processors;
         protected int processorIndex;
-        protected Queue<Task> queue;
-        protected Task currentTask;
-        protected long endTime;
+        protected Queue<Task> queue = new Queue<Task>();
+        protected Task currentTask = null;
+        protected long endTime = 0;
 
         public GiveProcessor(IProcessor[] processors, int processorIndex)
         {
             this.processors = processors;
             this.processorIndex = processorIndex;
-            this.queue = new Queue<Task>();
-            this.currentTask = null;
-            this.endTime = 0;
         }
 
         public void Update(long tick)

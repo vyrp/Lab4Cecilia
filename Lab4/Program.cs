@@ -11,6 +11,13 @@ namespace Lab4
         {
             Console.Title = "CES-33 - Lab4 - Balanceamento de carga";
 
+            if (args.Length != 1)
+            {
+                Console.WriteLine("Usage: Lab4.exe <taskNumber>");
+                Console.ReadLine();
+                return;
+            }
+
             IProcessor[] processors = new IProcessor[NUM_PROCESSORS];
             for (int i = 0; i < NUM_PROCESSORS; i++)
             {
@@ -18,7 +25,7 @@ namespace Lab4
             }
 
             long tick;
-            using (Generator generator = new Generator())
+            using (Generator generator = new Generator(args[0]))
             {
                 bool running = true;
                 for (tick = 0; running; ++tick)

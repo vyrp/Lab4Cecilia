@@ -22,9 +22,9 @@ namespace Lab4
 
         /* Constructor */
 
-        public Generator()
+        public Generator(string taskNumber)
         {
-            sr = new StreamReader(@"Tasks\tasks0.txt");
+            sr = new StreamReader(@"Tasks\tasks" + taskNumber + ".txt");
             lastTask = null;
         }
 
