@@ -5,7 +5,8 @@ namespace Lab4
 {
     class Program
     {
-        const int NUM_PROCESSORS = 4;
+        public const int NUM_PROCESSORS = 4;
+        public const int NUM_TRIALS = 4;
 
         static void Main(string[] args)
         {
