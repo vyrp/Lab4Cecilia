@@ -39,12 +39,13 @@ namespace Lab4
                             processors[task.Processor].Add(tick, task);
                         }
                     }
-                    else
+
+                    Array.ForEach(processors, p => p.Update(tick));
+
+                    if (!generator.HasTask)
                     {
                         running = processors.Any(p => p.IsRunning);
                     }
-
-                    Array.ForEach(processors, p => p.Update(tick));
                 }
             }
             

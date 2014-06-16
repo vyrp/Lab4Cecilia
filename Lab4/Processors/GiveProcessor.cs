@@ -10,7 +10,7 @@ namespace Lab4
         protected int processorIndex;
         protected Queue<Task> queue = new Queue<Task>();
         protected Task currentTask = null;
-        protected long endTime = 0;
+        protected long endTime = -1;
         protected int trials = 0;
         protected bool[] availableProcessors = new bool[Program.NUM_PROCESSORS];
         protected Random random = new Random();
@@ -25,10 +25,12 @@ namespace Lab4
         {
             if (endTime == tick)
             {
+                Logger.LogTask(tick, processorIndex, currentTask, false);
                 if (queue.Count > 0)
                 {
                     currentTask = queue.Dequeue();
                     endTime = tick + currentTask.Duration;
+                    Logger.LogTask(tick, processorIndex, currentTask, true);
                 }
                 else
                 {
@@ -47,6 +49,7 @@ namespace Lab4
             {
                 currentTask = task;
                 endTime = tick + currentTask.Duration;
+                Logger.LogTask(tick, processorIndex, currentTask, true);
             }
             else
             {
@@ -56,7 +59,6 @@ namespace Lab4
                 {
                     trials = Program.NUM_TRIALS;
                     InitAvailableProcessors();
-                    SendMessage(tick);
                 }
             }
         }
@@ -75,11 +77,11 @@ namespace Lab4
                 rnd = random.Next(Program.NUM_PROCESSORS);
             } while (!availableProcessors[rnd]);
 
-            Logger.LogMessage(processorIndex, rnd);
             availableProcessors[rnd] = false;
-            if (!processors[rnd].IsOverloaded)
+            bool accepts = !processors[rnd].IsOverloaded;
+            Logger.LogMessage(tick, processorIndex, rnd, accepts); 
+            if (accepts)
             {
-                Logger.AcceptMessage(rnd); 
                 processors[rnd].Add(tick, TopTask());
                 trials = 0;
             }
