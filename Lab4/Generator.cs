@@ -25,6 +25,7 @@ namespace Lab4
         public Generator(string taskNumber)
         {
             sr = new StreamReader(@"Tasks\tasks" + taskNumber + ".txt");
+            Console.WriteLine(sr.ReadLine());
             lastTask = null;
         }
 

@@ -26,6 +26,7 @@ namespace Lab4
             {
                 processors[i] = new GiveTakeProcessor(processors, i);
             }
+            Console.WriteLine("Heuristic: GiveProcessor\n");
 
             long tick;
             using (Generator generator = new Generator(args[0]))
