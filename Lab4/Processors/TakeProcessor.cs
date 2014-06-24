@@ -4,30 +4,25 @@ using System.Linq;
 
 namespace Lab4
 {
-    class TakeProcessor : IProcessor
+    class TakeProcessor : Processor
     {
-        protected IProcessor[] processors;
-        protected int processorIndex;
-        protected long endTime = -1;
-        protected int timeToAsk = 0;
-        protected Queue<Task> queue = new Queue<Task>();
-        protected Task currentTask = null;
-        protected int trials = 0;
         protected bool[] overloadedProcessors = new bool[Program.NUM_PROCESSORS];
-        protected Random random = new Random();
 
-        public TakeProcessor(IProcessor[] processors, int processorIndex)
+        public TakeProcessor(Processor[] processors, int processorIndex)
         {
             this.processors = processors;
             this.processorIndex = processorIndex;
         }
 
-        public void Update(long tick)
+        public override void Update(long tick)
         {
-            timeToAsk++;
             if (endTime == tick)
             {
                 Logger.LogTask(tick, processorIndex, currentTask, false);
+                if (GetState() == State.Available)
+                {
+                    timeToAsk = 0;                    
+                }
                 if (queue.Count > 0)
                 {
                     currentTask = queue.Dequeue();
@@ -39,19 +34,20 @@ namespace Lab4
                     currentTask = null;
                 }
             }
-            if (timeToAsk == Program.ASK_TIME && GetState() == State.Available)
+            if (timeToAsk == 0 && GetState() == State.Available)
             {
                 trials = Program.NUM_TRIALS;
                 InitOverloadedProcessors();
-                timeToAsk = 0;
+                timeToAsk = Program.ASK_TIME;
             }
             if (trials > 0 && GetState() == State.Available)
             {
                 SendMessage(tick);
             }
+            --timeToAsk;
         }
 
-        public void Add(long tick, Task task)
+        public override void Add(long tick, Task task)
         {
             if (currentTask == null)
             {
@@ -96,44 +92,6 @@ namespace Lab4
             {
                 overloadedProcessors[i] = (i != processorIndex);
             }
-        }
-
-        public Task TopTask()
-        {
-            return queue.Dequeue();
-        }
-
-        public int TaskCount
-        {
-            get { return queue.Count + (currentTask == null ? 0 : 1); }   
-        }
-
-        public State GetState()
-        {
-            int totalTasks = 0;
-            float overloadedInitialLimit;
-            foreach (IProcessor processor in processors)
-            {
-                totalTasks += processor.TaskCount;
-            }
-            overloadedInitialLimit = Math.Max(((float)totalTasks)/((float)Program.NUM_PROCESSORS), 2.0f); 
-            if((float)TaskCount > overloadedInitialLimit)
-            {
-                return State.Overloaded;
-            }
-            else if ((float)TaskCount <= overloadedInitialLimit / 2.0f)
-            {
-                return State.Available;
-            }
-            else
-            {
-                return State.Stable;
-            }
-        }
-
-        public bool IsRunning
-        {
-            get { return currentTask != null; }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lab4.Processors;
+using System;
 using System.Linq;
 
 namespace Lab4
@@ -20,10 +21,10 @@ namespace Lab4
                 return;
             }
 
-            IProcessor[] processors = new IProcessor[NUM_PROCESSORS];
+            Processor[] processors = new Processor[NUM_PROCESSORS];
             for (int i = 0; i < NUM_PROCESSORS; i++)
             {
-                processors[i] = new GiveProcessor(processors, i);
+                processors[i] = new GiveTakeProcessor(processors, i);
             }
 
             long tick;
