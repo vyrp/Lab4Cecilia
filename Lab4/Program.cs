@@ -1,6 +1,6 @@
-﻿using Lab4.Processors;
-using System;
+﻿using System;
 using System.Linq;
+using System.Reflection;
 
 namespace Lab4
 {
@@ -8,25 +8,35 @@ namespace Lab4
     {
         public const int NUM_PROCESSORS = 4;
         public const int NUM_TRIALS = 4;
-        public const int ASK_TIME = 2 * NUM_PROCESSORS;
+        public const int ASK_TIME = 10 * NUM_TRIALS;
+
+        private static Processor[] processors;
+
+        public static Processor[] Processors
+        {
+            get { return Array.AsReadOnly(processors).ToArray(); }
+        }
 
         static void Main(string[] args)
         {
             Console.Title = "CES-33 - Lab4 - Balanceamento de carga";
 
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
-                Console.WriteLine("Usage: Lab4.exe <taskNumber>");
+                Console.WriteLine("Usage: Lab4.exe <taskNumber> <Heuristic>");
                 Console.ReadLine();
                 return;
             }
 
-            Processor[] processors = new Processor[NUM_PROCESSORS];
+            string heuristic = args[1];
+            ConstructorInfo ctor = Type.GetType("Lab4." + heuristic).GetConstructor(new[] { typeof(Processor[]), typeof(int) });
+
+            processors = new Processor[NUM_PROCESSORS];
             for (int i = 0; i < NUM_PROCESSORS; i++)
             {
-                processors[i] = new GiveTakeProcessor(processors, i);
+                processors[i] = (Processor) ctor.Invoke(new object[] { processors, i });
             }
-            Console.WriteLine("Heuristic: GiveProcessor\n");
+            Console.WriteLine("================ Heuristic: " + heuristic + " ================\n");
 
             long tick;
             using (Generator generator = new Generator(args[0]))

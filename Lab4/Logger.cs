@@ -1,4 +1,4 @@
-﻿//#define FILE
+﻿#define FILE
 
 using System;
 using System.Linq;
@@ -45,7 +45,15 @@ namespace Lab4
         public static void LogMessage(long tick, int fromProcessor, int toProcessor, bool accepted)
         {
             CheckValid();
-            sw.WriteLine(string.Format("[{0:0000}] {1} -> {2}{3}", tick, fromProcessor, toProcessor, accepted ? "*" : " "));
+            sw.WriteLine(string.Format(
+                "[{0:0000}] {1}[{2}] -> {3}{4}  ({5})",
+                tick,
+                fromProcessor,
+                Program.Processors[fromProcessor].TaskCount,
+                toProcessor,
+                accepted ? "*" : " ",
+                Program.Processors.Select(p => p.TaskCount).Sum()
+            ));
             ++numMessages;
             ++sentMessages[fromProcessor];
             ++receivedMessages[toProcessor];
@@ -59,8 +67,15 @@ namespace Lab4
         {
             CheckValid();
             sw.WriteLine(string.Format(
-                "[{0:0000}] {1} {2}({3}, {4}){5}",
-                tick, processor, begin ? "<< " : "", task.Timestamp, task.Duration, begin ? "" : " >>"
+                "[{0:0000}] {1}[{6}] {2}({3}, {4}){5}  ({7})",
+                tick,
+                processor,
+                begin ? "<< " : "",
+                task.Timestamp,
+                task.Duration,
+                begin ? "" : " >>",
+                Program.Processors[processor].TaskCount,
+                Program.Processors.Select(p => p.TaskCount).Sum()
             ));
         }
 

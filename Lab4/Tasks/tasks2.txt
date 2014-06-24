@@ -1,4 +1,4 @@
-﻿# Heavy load, N = 4, TMT = 100
+﻿# Heavy load, N = 4, TMT = 100, Amount = 15
 2 5 107
 3 35 109
 1 60 87
