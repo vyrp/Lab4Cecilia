@@ -89,13 +89,16 @@ namespace Lab4
             Console.WriteLine("    Messages: " + numMessages);
             Console.WriteLine("    Accepted messages: " + numAccepted);
 
-            Console.WriteLine("\n+-----------+-----------+---------------+");
-            Console.WriteLine("| Processor | Sent msgs | Received msgs |");
-            Console.WriteLine("+-----------+-----------+---------------+");
+            Console.WriteLine("\n+-----------+-----------+---------------+--------------+");
+            Console.WriteLine("| Processor | Sent msgs | Received msgs | Running Time |");
+            Console.WriteLine("+-----------+-----------+---------------+--------------+");
             for (int i = 0; i < Program.NUM_PROCESSORS; i++)
             {
-                Console.WriteLine(string.Format("|     {0}     | {1,9} | {2,13} |", i, sentMessages[i], receivedMessages[i]));
-                Console.WriteLine("+-----------+-----------+---------------+");
+                Console.WriteLine(string.Format(
+                    "|     {0}     | {1,9} | {2,13} | {3,11:00.00}% |",
+                    i, sentMessages[i], receivedMessages[i], 100 * (float)Program.Processors[i].RunningTime/ticks
+                ));
+                Console.WriteLine("+-----------+-----------+---------------+--------------+");
             }
 
             int sentMax = sentMessages.Max();

@@ -8,14 +8,12 @@ namespace Lab4
     {
         protected bool[] overloadedProcessors = new bool[Program.NUM_PROCESSORS];
 
-        public TakeProcessor(Processor[] processors, int processorIndex)
-        {
-            this.processors = processors;
-            this.processorIndex = processorIndex;
-        }
+        public TakeProcessor(Processor[] processors, int processorIndex) : base(processors, processorIndex) { }
 
         public override void Update(long tick)
         {
+            UpdateRunningTime();
+
             if (endTime == tick)
             {
                 Logger.LogTask(tick, processorIndex, currentTask, false);

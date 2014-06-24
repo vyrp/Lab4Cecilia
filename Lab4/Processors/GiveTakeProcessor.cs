@@ -10,14 +10,12 @@ namespace Lab4
         protected bool[] otherProcessors = new bool[Program.NUM_PROCESSORS];
         protected State previousState;
 
-        public GiveTakeProcessor(Processor[] processors, int processorIndex)
-        {
-            this.processors = processors;
-            this.processorIndex = processorIndex;
-        }
+        public GiveTakeProcessor(Processor[] processors, int processorIndex) : base(processors, processorIndex) { }
 
         public override void Update(long tick)
         {
+            UpdateRunningTime();
+
             if (endTime == tick)
             {
                 Logger.LogTask(tick, processorIndex, currentTask, false);

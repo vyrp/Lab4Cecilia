@@ -7,6 +7,8 @@ namespace Lab4
 {
     abstract class Processor
     {
+        /* Fields */
+
         protected Processor[] processors;
         protected int processorIndex;
         protected long endTime = -1;
@@ -16,22 +18,45 @@ namespace Lab4
         protected int trials = 0;
         protected Random random = new Random();
         
-        public abstract void Update(long tick);
-        public abstract void Add(long tick, Task task);
+        /* Properties */
+
+        public long RunningTime { get; private set; }
 
         public bool IsRunning
         {
             get { return currentTask != null; }
         }
 
-        public Task TopTask()
-        {
-            return queue.Dequeue();
-        }
-
         public int TaskCount
         {
             get { return queue.Count + (currentTask == null ? 0 : 1); }
+        }
+
+        /* Constructor */
+
+        public Processor(Processor[] processors, int processorIndex)
+        {
+            this.processors = processors;
+            this.processorIndex = processorIndex;
+            this.RunningTime = 0;
+        }
+
+        /* Methods */
+
+        public abstract void Update(long tick);
+        public abstract void Add(long tick, Task task);
+
+        protected void UpdateRunningTime()
+        {
+            if (IsRunning)
+            {
+                RunningTime++;
+            }
+        }
+
+        public Task TopTask()
+        {
+            return queue.Dequeue();
         }
 
         public State GetState()
