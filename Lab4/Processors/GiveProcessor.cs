@@ -11,6 +11,7 @@ namespace Lab4
         protected Queue<Task> queue = new Queue<Task>();
         protected Task currentTask = null;
         protected long endTime = -1;
+        protected int timeToAsk = Program.ASK_TIME;
         protected int trials = 0;
         protected bool[] availableProcessors = new bool[Program.NUM_PROCESSORS];
         protected Random random = new Random();
@@ -37,10 +38,17 @@ namespace Lab4
                     currentTask = null;
                 }
             }
-            else if (TaskCount >= 2 && trials > 0)
+            else if (trials > 0 && GetState() == State.Overloaded)
             {
                 SendMessage(tick);
             }
+            else if (timeToAsk == 0 && GetState() == State.Overloaded)
+            {
+                trials = Program.NUM_TRIALS;
+                InitAvailableProcessors();
+                timeToAsk = Program.ASK_TIME;
+            }
+            --timeToAsk;
         }
 
         public void Add(long tick, Task task)
@@ -54,11 +62,11 @@ namespace Lab4
             else
             {
                 queue.Enqueue(task);
-                
-                if (IsOverloaded)
+                if (GetState() == State.Overloaded)
                 {
                     trials = Program.NUM_TRIALS;
                     InitAvailableProcessors();
+                    timeToAsk = 0;
                 }
             }
         }
@@ -78,7 +86,8 @@ namespace Lab4
             } while (!availableProcessors[rnd]);
 
             availableProcessors[rnd] = false;
-            bool accepts = !processors[rnd].IsOverloaded;
+            bool accepts = false;
+            if (processors[rnd].GetState() == State.Available) accepts = true;
             Logger.LogMessage(tick, processorIndex, rnd, accepts); 
             if (accepts)
             {
@@ -105,10 +114,29 @@ namespace Lab4
             return queue.Dequeue();
         }
 
-        public bool IsOverloaded
+        public State GetState()
         {
-            get { return IsRunning; }
+            int totalTasks = 0;
+            float overloadedInitialLimit;
+            foreach (IProcessor processor in processors)
+            {
+                totalTasks += processor.TaskCount;
+            }
+            overloadedInitialLimit = Math.Max(((float)totalTasks) / ((float)Program.NUM_PROCESSORS), 2.0f);
+            if ((float)TaskCount > overloadedInitialLimit)
+            {
+                return State.Overloaded;
+            }
+            else if ((float)TaskCount <= overloadedInitialLimit / 2.0f)
+            {
+                return State.Available;
+            }
+            else
+            {
+                return State.Stable;
+            }
         }
+
 
         public bool IsRunning
         {

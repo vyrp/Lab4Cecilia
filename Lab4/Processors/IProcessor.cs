@@ -8,7 +8,9 @@ namespace Lab4
         void Add(long tick, Task task);
         Task TopTask();
         int TaskCount { get; }
-        bool IsOverloaded { get; }
         bool IsRunning { get; }
+        State GetState();
     }
+
+    enum State { Available, Stable, Overloaded };
 }

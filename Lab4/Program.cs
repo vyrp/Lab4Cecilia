@@ -7,6 +7,7 @@ namespace Lab4
     {
         public const int NUM_PROCESSORS = 4;
         public const int NUM_TRIALS = 4;
+        public const int ASK_TIME = 2 * NUM_PROCESSORS;
 
         static void Main(string[] args)
         {
