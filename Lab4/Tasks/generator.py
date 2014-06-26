@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 
-from random import gauss, randrange
+from random import gauss, randrange, choice
 
 N = 4           # Número de processadores
 TMT = 100       # Tempo médio da tarefa
@@ -8,9 +8,9 @@ Amount = 150    # Quantidade de tarefas
 Sigma = 20      # Desvio padrão de TMT
 Min = 50        # Mínimo valor de TMT
 Max = 150       # Máximo valor de TMT
-Type = 'Light'  # Tipo de carga (Heavy|Light)
+Type = 'Heavy'  # Tipo de carga (Heavy|Light)
 
-print '# %s load, N = %d, TMT = %d, Amount = %d' % (Type, N, TMT, Amount)
+print '# %s load, N = %d, TMT = %d, Amount = %d, Nonuniform' % (Type, N, TMT, Amount)
 
 L = Amount * TMT / N
 if Type == 'Light':
@@ -23,7 +23,7 @@ instants = sorted(instants)
 
 i = 0
 while i < Amount:
-    processor = randrange(N)
+    processor = choice([0, 0, 0, 0, 1, 2, 3])
     instant = instants[i]
     duration = int(round(gauss(TMT, Sigma)))
     if Min < duration and duration < Max:
