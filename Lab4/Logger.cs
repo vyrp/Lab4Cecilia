@@ -17,6 +17,7 @@ namespace Lab4
         static private StreamWriter sw;
         static private int[] sentMessages = new int[Program.NUM_PROCESSORS];
         static private int[] receivedMessages = new int[Program.NUM_PROCESSORS];
+        static private int[] finishedTasks = new int[Program.NUM_PROCESSORS];
 
         /* Constructor */
 
@@ -29,6 +30,7 @@ namespace Lab4
             {
                 sentMessages[i] = 0;
                 receivedMessages[i] = 0;
+                finishedTasks[i] = 0;
             }
 
 #if FILE
@@ -77,6 +79,10 @@ namespace Lab4
                 Program.Processors[processor].TaskCount,
                 Program.Processors.Select(p => p.TaskCount).Sum()
             ));
+            if (!begin)
+            {
+                ++finishedTasks[processor];
+            }
         }
 
         public static void Result(long ticks)
@@ -89,16 +95,16 @@ namespace Lab4
             Console.WriteLine("    Messages: " + numMessages);
             Console.WriteLine("    Accepted messages: " + numAccepted);
 
-            Console.WriteLine("\n+-----------+-----------+---------------+--------------+");
-            Console.WriteLine("| Processor | Sent msgs | Received msgs | Running Time |");
-            Console.WriteLine("+-----------+-----------+---------------+--------------+");
+            Console.WriteLine("\n+-----------+-----------+---------------+--------------+-----------+");
+            Console.WriteLine("| Processor | Sent msgs | Received msgs | Running Time | Completed |");
+            Console.WriteLine("+-----------+-----------+---------------+--------------+-----------+");
             for (int i = 0; i < Program.NUM_PROCESSORS; i++)
             {
                 Console.WriteLine(string.Format(
-                    "|     {0}     | {1,9} | {2,13} | {3,11:00.00}% |",
-                    i, sentMessages[i], receivedMessages[i], 100 * (float)Program.Processors[i].RunningTime/ticks
+                    "|     {0}     | {1,9} | {2,13} | {3,11:00.00}% | {4,9} |",
+                    i, sentMessages[i], receivedMessages[i], 100 * (float)Program.Processors[i].RunningTime/ticks, finishedTasks[i]
                 ));
-                Console.WriteLine("+-----------+-----------+---------------+--------------+");
+                Console.WriteLine("+-----------+-----------+---------------+--------------+-----------+");
             }
 
             int sentMax = sentMessages.Max();
